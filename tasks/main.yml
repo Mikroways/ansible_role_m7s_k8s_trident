@@ -21,22 +21,22 @@
 - name: configure setup/backend.json
   template:
     src: "{{ role_path + '/templates/backend.json.j2' }}"
-    dest: "{{ trident_tempdir }}/trident-installer-{{trident_version}}/setup/backend.json"
+    dest: "{{ trident_tempdir.path }}/trident-installer/setup/backend.json"
     mode: '0444'
 
 - name: deploy trident
-  command: "{{ trident_tempdir }}/trident-installer-{{trident_version}}/tridentctl install -n trident"
+  command: "{{ trident_tempdir.path }}/trident-installer-{{trident_version}}/tridentctl install -n trident"
   args:
-    chrdir: "{{ trident_tempdir }}/trident-installer-{{trident_version}}/"
+    chrdir: "{{ trident_tempdir.path }}/trident-installer-{{trident_version}}/"
   when: "{{ trident_enabled }}"
 
 - name: uninstall trident
-  command: "{{ trident_tempdir }}/trident-installer-{{trident_version}}/tridentctl uninstall -n trident"
+  command: "{{ trident_tempdir.path }}/trident-installer-{{trident_version}}/tridentctl uninstall -n trident"
   args:
-    chrdir: "{{ trident_tempdir }}/trident-installer-{{trident_version}}/"
+    chrdir: "{{ trident_tempdir.path }}/trident-installer-{{trident_version}}/"
   when: "{{ trident_enabled == false }}"
 
 - name: delete temporary files
   file:
     state: absent
-    path: "{{ trident_tempdir }}/"
+    path: "{{ trident_tempdir.path }}/"
