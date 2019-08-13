@@ -20,7 +20,7 @@
 
 - name: configure setup/backend.json
   template:
-    src: /templates/backend.json.j2
+    src: "{{ role_path + '/templates/backend.json.j2' }}"
     dest: "{{ trident_tempdir }}/trident-installer-{{trident_version}}/setup/backend.json"
     mode: '0444'
 
