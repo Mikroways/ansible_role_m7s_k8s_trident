@@ -25,16 +25,16 @@
     mode: '0444'
 
 - name: deploy trident
-  command: "{{ trident_tempdir.path }}/trident-installer/tridentctl install -n trident"
-  args:
-    chdir: "{{ trident_tempdir.path }}/trident-installer"
-  when: "{{ trident_enabled }}"
-
-- name: uninstall trident
-  command: "{{ trident_tempdir.path }}/trident-installer/tridentctl uninstall -n trident"
+  command: "./tridentctl install -n trident"
   args:
     chdir: "{{ trident_tempdir.path }}/trident-installer/"
-  when: "{{ trident_enabled == false }}"
+  when: trident_enabled
+
+- name: uninstall trident
+  command: "./tridentctl uninstall -n trident"
+  args:
+    chdir: "{{ trident_tempdir.path }}/trident-installer/"
+  when: trident_enabled == false
 
 - name: delete temporary files
   file:
