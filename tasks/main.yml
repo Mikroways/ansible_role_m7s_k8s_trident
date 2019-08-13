@@ -6,14 +6,37 @@
     suffix: trident
   register: trident_tempdir
 
-- name: download trident 19.07.0
+- name: download trident {{trident_version}}
   get_url:
-    url: https://github.com/NetApp/trident/releases/download/v19.07.0/trident-installer-19.07.0.tar.gz
-    dest: "{{ trident_tempdir.path }}/trident-installer-19.07.0.tar.gz"
+    url: https://github.com/NetApp/trident/releases/download/v{{trident_version}}/trident-installer-{{trident_version}}.tar.gz
+    dest: "{{ trident_tempdir.path }}/trident-installer-{{trident_version}}.tar.gz"
     mode: '0440'
 
-- name: Extract trident-installer-19.07.0.tar.gz
+- name: extract trident-installer-{{trident_version}}.tar.gz
   unarchive:
-    src: "{{ trident_tempdir.path }}/trident-installer-19.07.0.tar.gz"
+    src: "{{ trident_tempdir.path }}/trident-installer-{{trident_version}}.tar.gz"
     dest: "{{ trident_tempdir.path }}"
     remote_src: yes
+
+- name: configure setup/backend.json
+  template:
+    src: /templates/backend.json.j2
+    dest: "{{ trident_tempdir }}/trident-installer-{{trident_version}}/setup/backend.json"
+    mode: '0444'
+
+- name: deploy trident
+  command: "{{ trident_tempdir }}/trident-installer-{{trident_version}}/tridentctl install -n trident"
+  args:
+    chrdir: "{{ trident_tempdir }}/trident-installer-{{trident_version}}/"
+  when: "{{ trident_enabled }}"
+
+- name: uninstall trident
+  command: "{{ trident_tempdir }}/trident-installer-{{trident_version}}/tridentctl uninstall -n trident"
+  args:
+    chrdir: "{{ trident_tempdir }}/trident-installer-{{trident_version}}/"
+  when: "{{ trident_enabled == false }}"
+
+- name: delete temporary files
+  file:
+    state: absent
+    path: "{{ trident_tempdir }}/"
