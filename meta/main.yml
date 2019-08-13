@@ -1,0 +1,27 @@
+---
+
+dependencies: []
+
+galaxy_info:
+  role_name: trident
+  author: 'Matias Ferrigno'
+  description: 'Install trident and deploy on k8s'
+  company: 'Mikroways'
+  license: 'GPL-3.0'
+  min_ansible_version: '2.0.0'
+
+  platforms:
+
+    - name: 'Ubuntu'
+      versions: [ 'all' ]
+
+    - name: 'Debian'
+      versions: [ 'all' ]
+    
+    - name: 'RedHat'
+      versions: [ '7' ]
+
+  galaxy_tags:
+    - kubernetes
+    - netapp
+    - trident
