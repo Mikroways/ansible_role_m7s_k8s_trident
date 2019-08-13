@@ -33,7 +33,7 @@
 - name: uninstall trident
   command: "{{ trident_tempdir.path }}/trident-installer/tridentctl uninstall -n trident"
   args:
-    chrdir: "{{ trident_tempdir.path }}/trident-installer/"
+    chdir: "{{ trident_tempdir.path }}/trident-installer/"
   when: "{{ trident_enabled == false }}"
 
 - name: delete temporary files
