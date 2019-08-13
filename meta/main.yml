@@ -3,7 +3,7 @@
 dependencies: []
 
 galaxy_info:
-  role_name: trident
+  role_name: k8s_trident
   author: 'Matias Ferrigno'
   description: 'Install trident and deploy on k8s'
   company: 'Mikroways'
