@@ -16,3 +16,4 @@
   unarchive:
     src: "{{ trident_tempdir.path }}/trident-installer-19.07.0.tar.gz"
     dest: "{{ trident_tempdir.path }}"
+    remote_src: yes
