@@ -31,7 +31,7 @@
   when: trident_enabled
 
 - name: deploy trident
-  shell: "./tridentctl create backend -f ./setup/backend.json"
+  shell: "./tridentctl -n trident create backend -f ./setup/backend.json"
   args:
     chdir: "{{ trident_tempdir.path }}/trident-installer/"
   when: trident_enabled
