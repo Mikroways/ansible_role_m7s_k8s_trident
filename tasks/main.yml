@@ -30,6 +30,12 @@
     chdir: "{{ trident_tempdir.path }}/trident-installer/"
   when: trident_enabled
 
+- name: deploy trident
+  shell: "./tridentctl create backend -f ./setup/backend.json"
+  args:
+    chdir: "{{ trident_tempdir.path }}/trident-installer/"
+  when: trident_enabled
+
 - name: uninstall trident
   shell: "./tridentctl uninstall -n trident"
   args:
