@@ -29,6 +29,7 @@
   args:
     chdir: "{{ trident_tempdir.path }}/trident-installer/"
   when: trident_enabled
+  become: yes
 
 - name: uninstall trident
   shell: "./tridentctl uninstall -n trident"
