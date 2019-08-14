@@ -48,7 +48,7 @@
     chdir: "{{ trident_tempdir.path }}/trident-installer/"
   when: trident_enabled == false
 
-- name: delete temporary files
-  file:
-    state: absent
-    path: "{{ trident_tempdir.path }}/"
+# - name: delete temporary files
+#   file:
+#     state: absent
+#     path: "{{ trident_tempdir.path }}/"
