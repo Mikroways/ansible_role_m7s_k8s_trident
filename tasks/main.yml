@@ -25,16 +25,22 @@
     mode: '0444'
 
 - name: deploy trident
-  shell: "./tridentctl install -n trident"
+  shell: "./tridentctl upgrade -n trident"
   args:
     chdir: "{{ trident_tempdir.path }}/trident-installer/"
   when: trident_enabled
 
-- name: deploy trident
+- name: deploy trident - create backend
   shell: "./tridentctl -n trident create backend -f ./setup/backend.json"
   args:
     chdir: "{{ trident_tempdir.path }}/trident-installer/"
   when: trident_enabled
+
+- name: create storage class
+  k8s:
+    definition: "{{ lookup('template', role_path + '/templates/storage-class.yaml.j2') }}"
+    state: "{{ present if trident_enabled else absent }}"
+  run_once: true
 
 - name: uninstall trident
   shell: "./tridentctl uninstall -n trident"
