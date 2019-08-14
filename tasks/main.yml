@@ -25,13 +25,13 @@
     mode: '0444'
 
 - name: deploy trident
-  command: "./tridentctl install -n trident"
+  shell: "./tridentctl install -n trident"
   args:
     chdir: "{{ trident_tempdir.path }}/trident-installer/"
   when: trident_enabled
 
 - name: uninstall trident
-  command: "./tridentctl uninstall -n trident"
+  shell: "./tridentctl uninstall -n trident"
   args:
     chdir: "{{ trident_tempdir.path }}/trident-installer/"
   when: trident_enabled == false
