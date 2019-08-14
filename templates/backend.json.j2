@@ -1,5 +1,5 @@
 {
-    "version": "{{ trident_backend_version }}",
+    "version": {{ trident_backend_version }},
     "storageDriverName": "{{ trident_backend_storageDriverName }}",
     "managementLIF": "{{ trident_backend_managementLIF }}",
     "backendName": "{{ trident_backend_backendName }}",
@@ -7,5 +7,5 @@
     "svm": "{{ trident_backend_svm }}",
     "username": "{{ trident_backend_username }}",
     "password": "{{ trident_backend_password }}",
-    "defaults": {{ trident_backend_defaults }}
+    "defaults": {{ trident_backend_defaults | safe }}
 }

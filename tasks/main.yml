@@ -1,5 +1,17 @@
 ---
 
+- name: check if trident is already installed (if namespace trident exists)
+  k8s_facts:
+    api_version: v1
+    kind: Namespace
+    name: trident
+  register: ns_trident
+
+- name: fail
+  fail:
+    msg: "Ya existe un despliegue anterior o todavía no fue totalmente eliminado"
+  when: ns_trident.resources | length > 0 and trident_enabled == true and trident_install_anyway == false
+
 - name: create temporary trident directory
   tempfile:
     state: directory
@@ -48,7 +60,7 @@
     chdir: "{{ trident_tempdir.path }}/trident-installer/"
   when: trident_enabled == false
 
-# - name: delete temporary files
-#   file:
-#     state: absent
-#     path: "{{ trident_tempdir.path }}/"
+- name: delete temporary files
+  file:
+    state: absent
+    path: "{{ trident_tempdir.path }}/"
