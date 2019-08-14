@@ -25,7 +25,7 @@
     mode: '0444'
 
 - name: deploy trident
-  shell: "./tridentctl upgrade -n trident"
+  shell: "./tridentctl install -n trident"
   args:
     chdir: "{{ trident_tempdir.path }}/trident-installer/"
   when: trident_enabled
