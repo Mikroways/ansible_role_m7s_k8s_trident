@@ -11,16 +11,12 @@ galaxy_info:
   min_ansible_version: '2.0.0'
 
   platforms:
-
     - name: 'Ubuntu'
       versions: [ 'all' ]
-
     - name: 'Debian'
       versions: [ 'all' ]
-    
-    - name: 'RedHat'
+    - name: 'EL'
       versions: [ '7' ]
-
   galaxy_tags:
     - kubernetes
     - netapp

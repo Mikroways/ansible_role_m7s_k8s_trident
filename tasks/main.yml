@@ -10,7 +10,7 @@
 - name: check if there is previous version installed
   debug:
     msg: "Ya existe un despliegue anterior o todavía no fue totalmente eliminado"
-  when: ns_trident.resources | length > 0 and trident_enabled == true and trident_install_anyway == false
+  when: ns_trident.resources | length > 0 and m7s_k8s_trident_enabled == true and trident_install_anyway == false
 
 - name: trident install or uninstall
   block:
@@ -18,52 +18,52 @@
     tempfile:
       state: directory
       suffix: trident
-    register: trident_tempdir
+    register: m7s_k8s_trident_tempdir
 
-  - name: download trident {{trident_version}}
+  - name: download trident {{m7s_k8s_trident_version}}
     get_url:
-      url: https://github.com/NetApp/trident/releases/download/v{{trident_version}}/trident-installer-{{trident_version}}.tar.gz
-      dest: "{{ trident_tempdir.path }}/trident-installer-{{trident_version}}.tar.gz"
+      url: https://github.com/NetApp/trident/releases/download/v{{m7s_k8s_trident_version}}/trident-installer-{{trident_version}}.tar.gz
+      dest: "{{ m7s_k8s_trident_tempdir.path }}/trident-installer-{{trident_version}}.tar.gz"
       mode: '0440'
 
-  - name: extract trident-installer-{{trident_version}}.tar.gz
+  - name: extract trident-installer-{{m7s_k8s_trident_version}}.tar.gz
     unarchive:
-      src: "{{ trident_tempdir.path }}/trident-installer-{{trident_version}}.tar.gz"
-      dest: "{{ trident_tempdir.path }}"
+      src: "{{ m7s_k8s_trident_tempdir.path }}/trident-installer-{{trident_version}}.tar.gz"
+      dest: "{{ m7s_k8s_trident_tempdir.path }}"
       remote_src: yes
 
   - name: configure setup/backend.json
     template:
       src: "{{ role_path + '/templates/backend.json.j2' }}"
-      dest: "{{ trident_tempdir.path }}/trident-installer/setup/backend.json"
+      dest: "{{ m7s_k8s_trident_tempdir.path }}/trident-installer/setup/backend.json"
       mode: '0444'
 
   - name: deploy trident
     shell: "./tridentctl install -n trident"
     args:
-      chdir: "{{ trident_tempdir.path }}/trident-installer/"
-    when: trident_enabled
+      chdir: "{{ m7s_k8s_trident_tempdir.path }}/trident-installer/"
+    when: m7s_k8s_trident_enabled
 
   - name: deploy trident - create backend
     shell: "./tridentctl -n trident create backend -f ./setup/backend.json"
     args:
-      chdir: "{{ trident_tempdir.path }}/trident-installer/"
-    when: trident_enabled
+      chdir: "{{ m7s_k8s_trident_tempdir.path }}/trident-installer/"
+    when: m7s_k8s_trident_enabled
 
   - name: create storage class
     k8s:
       definition: "{{ lookup('template', role_path + '/templates/storage-class.yaml.j2') }}"
-      state: "{{ 'present' if trident_enabled else 'absent' }}"
+      state: "{{ 'present' if m7s_k8s_trident_enabled else 'absent' }}"
     run_once: true
 
   - name: uninstall trident
     shell: "./tridentctl uninstall -n trident"
     args:
-      chdir: "{{ trident_tempdir.path }}/trident-installer/"
-    when: trident_enabled == false
+      chdir: "{{ m7s_k8s_trident_tempdir.path }}/trident-installer/"
+    when: m7s_k8s_trident_enabled == false
 
   - name: delete temporary files
     file:
       state: absent
-      path: "{{ trident_tempdir.path }}/"
-  when: (ns_trident.resources | length == 0 and trident_enabled == true) or (ns_trident.resources | length > 0 and trident_enabled == true and trident_install_anyway == true)
+      path: "{{ m7s_k8s_trident_tempdir.path }}/"
+  when: (ns_trident.resources | length == 0 and m7s_k8s_trident_enabled == true) or (ns_trident.resources | length > 0 and trident_enabled == true and trident_install_anyway == true)
